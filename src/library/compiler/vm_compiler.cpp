@@ -18,6 +18,7 @@ Author: Leonardo de Moura
 #include "library/replace_visitor.h"
 #include "library/vm/vm.h"
 #include "library/vm/optimize.h"
+#include "library/compiler/forbidden.h"
 #include "library/compiler/simp_inductive.h"
 #include "library/compiler/erase_irrelevant.h"
 #include "library/compiler/nat_value.h"
@@ -82,12 +83,26 @@ class vm_compiler_fn {
         throw exception(sstream() << "code generation failed, VM does not have code for '" << n << "'");
     }
 
+    [[ noreturn ]] void throw_forbidden(name const & n) {
+        throw exception(sstream() << "failed to generate bytecode, code depends on internal definition '"
+                        << n << "' which cannot be used in executable code");
+    }
+
+    void check_forbidden(expr const & e) {
+        expr const & fn = get_app_fn(e);
+        if (is_constant(fn) && is_forbidden_in_code(m_env, const_name(fn))) {
+            throw exception(sstream() << "failed to generate bytecode, code depends on internal definition '"
+                            << const_name(fn) << "' which cannot be used in executable code");
+        }
+    }
+
     void emit_apply_instr(unsigned n) {
         for (unsigned i = 0; i < n; i++)
             emit(mk_apply_instr());
     }
 
     void compile_constant(expr const & e) {
+        check_forbidden(e);
         name const & n = const_name(e);
         if (is_neutral_expr(e)) {
             emit(mk_sconstructor_instr(0));
@@ -240,6 +255,7 @@ class vm_compiler_fn {
     }
 
     void compile_app(expr const & e, unsigned bpz, name_map<unsigned> const & m) {
+        check_forbidden(e);
         expr const & fn = get_app_fn(e);
         if (is_vm_supported_cases(m_env, fn)) {
             compile_cases_on(e, bpz, m);

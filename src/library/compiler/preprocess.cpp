@@ -21,6 +21,7 @@ Author: Leonardo de Moura
 #include "library/module.h"
 #include "library/vm/vm.h"
 #include "library/compiler/util.h"
+#include "library/compiler/forbidden.h"
 #include "library/compiler/preprocess.h"
 #include "library/compiler/compiler_step_visitor.h"
 #include "library/compiler/comp_irrelevant.h"
@@ -95,12 +96,20 @@ class expand_aux_fn : public compiler_step_visitor {
         return !is_vm_function(env(), n);
     }
 
+    bool is_forbidden_in_code(expr const & e) {
+        expr const & fn = get_app_fn(e);
+        if (!is_constant(fn))
+            return false;
+        name const & n = const_name(fn);
+        return ::lean::is_forbidden_in_code(env(), n);
+    }
+
     bool is_pack_unpack(expr const & e) {
         return ::lean::is_pack_unpack(m_env, e);
     }
 
     bool should_unfold(expr const & e) {
-        return is_not_vm_function(e) && !ctx().is_proof(e) && !is_pack_unpack(e);
+        return is_not_vm_function(e) && !is_forbidden_in_code(e) && !ctx().is_proof(e) && !is_pack_unpack(e);
     }
 
     expr unfold(expr const & e) {

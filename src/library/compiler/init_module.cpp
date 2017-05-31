@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Author: Leonardo de Moura
 */
 #include "library/compiler/preprocess.h"
+#include "library/compiler/forbidden.h"
 #include "library/compiler/nat_value.h"
 #include "library/compiler/comp_irrelevant.h"
 #include "library/compiler/inliner.h"
@@ -16,6 +17,7 @@ Author: Leonardo de Moura
 namespace lean {
 void initialize_compiler_module() {
     initialize_preprocess();
+    initialize_forbidden();
     initialize_nat_value();
     initialize_comp_irrelevant();
     initialize_inliner();
@@ -33,6 +35,7 @@ void finalize_compiler_module() {
     finalize_inliner();
     finalize_comp_irrelevant();
     finalize_nat_value();
+    finalize_forbidden();
     finalize_preprocess();
 }
 }

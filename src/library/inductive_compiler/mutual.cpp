@@ -23,11 +23,12 @@ Author: Daniel Selsam
 #include "library/pattern_attribute.h"
 #include "library/constructions/has_sizeof.h"
 #include "library/constructions/injective.h"
+#include "library/compiler/forbidden.h"
+#include "library/tactic/eqn_lemmas.h"
 #include "library/inductive_compiler/compiler.h"
 #include "library/inductive_compiler/basic.h"
 #include "library/inductive_compiler/mutual.h"
 #include "library/inductive_compiler/util.h"
-#include "library/tactic/eqn_lemmas.h"
 
 namespace lean {
 
@@ -348,6 +349,8 @@ class add_mutual_inductive_decl_fn {
             lean_assert(!has_local(sizeof_type));
             lean_assert(!has_local(sizeof_val));
             m_env = module::add(m_env, check(m_env, mk_definition_inferring_trusted(m_env, sizeof_name, to_list(m_mut_decl.get_lp_names()), sizeof_type, sizeof_val, true)));
+            /* We mark sizeof as forbidden in code because it depends on the inductive datatype internal representation. */
+            m_env = mark_forbidden_in_code(m_env, sizeof_name);
             m_env = add_protected(m_env, sizeof_name);
             m_tctx.set_env(m_env);
 

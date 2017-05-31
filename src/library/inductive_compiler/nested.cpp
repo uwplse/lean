@@ -31,6 +31,7 @@ Author: Daniel Selsam
 #include "library/attribute_manager.h"
 #include "library/pattern_attribute.h"
 #include "library/constructions/injective.h"
+#include "library/compiler/forbidden.h"
 #include "library/tactic/simp_lemmas.h"
 #include "library/constructions/has_sizeof.h"
 #include "library/inductive_compiler/ginductive.h"
@@ -784,6 +785,8 @@ class add_nested_inductive_decl_fn {
 
             define(sizeof_name, sizeof_type, sizeof_val);
             m_env = add_protected(m_env, sizeof_name);
+            /* We mark sizeof as forbidden in code because it depends on the inductive datatype internal representation. */
+            m_env = mark_forbidden_in_code(m_env, sizeof_name);
             m_tctx.set_env(m_env);
 
             expr c_sizeof = mk_app(mk_app(mk_constant(sizeof_name, m_nested_decl.get_levels()), m_nested_decl.get_params()), m_param_insts);
