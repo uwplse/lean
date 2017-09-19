@@ -136,7 +136,7 @@ after_script:
 notifications:
   email:
     recipients:
-     - lean-build@googlegroups.com
+     - jroesch@cs.washington.edu
     on_success: change
     on_failure: always
 
@@ -149,5 +149,5 @@ deploy:
   overwrite: true
   on:
     condition: $UPLOAD = ON && $GH_TOKEN
-    repo: leanprover/lean
+    repo: uwplse/lean
     tags: true
