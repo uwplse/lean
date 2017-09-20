@@ -113,7 +113,7 @@ script:
   - if [[ $STATIC != ON ]]; then STATIC=OFF; fi
   - if [[ $MULTI_THREAD != OFF ]]; then MULTI_THREAD=ON; fi
   - OPTIONS=""
-  - if [[ $TRAVIS_BRANCH == master ]]; then OPTIONS+=" -DLEAN_VERSION_STRING=nightly"; fi
+  - if [[ $TRAVIS_BRANCH == cse-505 ]]; then OPTIONS+=" -DLEAN_VERSION_STRING=nightly"; fi
   - cmake -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE
           -DCMAKE_CXX_COMPILER=$CMAKE_CXX_COMPILER
           -DTESTCOV=$TESTCOV
@@ -126,7 +126,7 @@ script:
   - make -j2 || exit
   - if [[ $TEST != OFF ]]; then yes "A" | ctest -j2 --output-on-failure; fi
   - if [[ $UPLOAD == ON ]]; then cpack; fi
-  - if [[ $UPLOAD == ON && $GH_TOKEN && $TRAVIS_PULL_REQUEST == false && $TRAVIS_BRANCH == master ]]; then (cd ..; bash script/deploy_gh_pages.sh); fi
+  - if [[ $UPLOAD == ON && $GH_TOKEN && $TRAVIS_PULL_REQUEST == false && $TRAVIS_BRANCH == cse-505 ]]; then (cd ..; bash script/deploy_gh_pages.sh); fi
   - if [[ $TEST_LEANPKG_REGISTRY == ON ]]; then ../script/test_registry.py; fi
   - cd ..
 
