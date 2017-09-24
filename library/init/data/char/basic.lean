@@ -30,5 +30,11 @@ instance : decidable_eq char :=
 have decidable_eq (fin char_sz), from fin.decidable_eq _,
 this
 
+instance char.has_lt : has_lt char :=
+⟨ λ c c', c.to_nat < c'.to_nat ⟩
+
+instance char.has_le : has_le char :=
+⟨ λ c c', c.to_nat <= c'.to_nat ⟩
+
 instance : inhabited char :=
 ⟨'A'⟩
