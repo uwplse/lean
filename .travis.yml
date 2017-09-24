@@ -28,75 +28,11 @@ matrix:
        UPLOAD=ON
        STATIC=ON
 
-   - os: linux
-     env:
-       CMAKE_CXX_COMPILER=clang++-3.4
-       CMAKE_BUILD_TYPE=Release
-       LEAN_EXTRA_MAKE_OPTS=-t0
-       TCMALLOC=ON
-
-   - os: linux
-     addons: &gcc6_addons
-       apt:
-         sources: *apt_sources
-         packages:
-           - *default_packages
-           - g++-6
-           - gcc-6
-     env:
-       CMAKE_CXX_COMPILER=g++-6
-       CMAKE_BUILD_TYPE=Release
-       TCMALLOC=ON
-
-   - os: linux
-     addons: *gcc6_addons
-     env:
-       CMAKE_CXX_COMPILER=g++-6
-       CMAKE_BUILD_TYPE=Release
-       TESTCOV=ON
-
-   - os: linux
-     addons: *gcc6_addons
-     env:
-       CMAKE_CXX_COMPILER=g++-6
-       CMAKE_BUILD_TYPE=Release
-       MULTI_THREAD=OFF
-
-   - os: linux
-     addons:
-       apt:
-         sources: *apt_sources
-         packages:
-           - *default_packages
-           - z3
-     env:
-       CMAKE_CXX_COMPILER=g++-4.9
-       CMAKE_BUILD_TYPE=Release
-       TEST=OFF
-       TEST_LEANPKG_REGISTRY=ON
-
-   - os: linux
-     env:
-       CMAKE_CXX_COMPILER=clang++-3.4
-       CMAKE_BUILD_TYPE=Debug
-       TCMALLOC=ON
-
-   - os: linux
-     dist: precise
-     env:
-       CMAKE_CXX_COMPILER=g++-4.9
-       CMAKE_BUILD_TYPE=Debug
-
    - os: osx
      env:
        CMAKE_CXX_COMPILER=clang++
        CMAKE_BUILD_TYPE=Release
        UPLOAD=ON
-
-   - os: osx
-     env:
-       CMAKE_CXX_COMPILER=g++
-       CMAKE_BUILD_TYPE=Debug
 
 before_install:
   - if [[ $TRAVIS_OS_NAME == osx ]]; then
