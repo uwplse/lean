@@ -13,7 +13,7 @@ build_script:
       cd $APPVEYOR_BUILD_FOLDER;
       mkdir build && cd build;
       OPTIONS='';
-      if [[ $APPVEYOR_REPO_BRANCH == master ]]; then OPTIONS+=' -DLEAN_VERSION_STRING=nightly'; fi;
+      if [[ $APPVEYOR_REPO_BRANCH == cse-505 ]]; then OPTIONS+=' -DLEAN_VERSION_STRING=nightly'; fi;
       cmake ../src -DINCLUDE_MSYS2_DLLS=ON -DCMAKE_BUILD_TYPE=Release $OPTIONS -G Ninja"
   - C:\msys64\usr\bin\bash -lc "exec 0</dev/null && cd $APPVEYOR_BUILD_FOLDER/build && ninja && cpack"
 
